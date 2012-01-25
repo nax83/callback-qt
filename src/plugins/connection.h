@@ -19,10 +19,11 @@
 
 #include "../pgplugin.h"
 
+#ifdef MOBILE
 #include <QSystemNetworkInfo>
 
 QTM_USE_NAMESPACE
-
+#endif
 class Connection : public PGPlugin
 {
     Q_OBJECT
@@ -35,18 +36,18 @@ signals:
 
 public slots:
     void setChangeCallback( int scId, int ecId );
-
+#ifdef MOBILE
     void cellDataTechnologyChanged( QSystemNetworkInfo::CellDataTechnology cellTech );
     void networkModeChanged( QSystemNetworkInfo::NetworkMode mode );
     void networkStatusChanged( QSystemNetworkInfo::NetworkMode mode, QSystemNetworkInfo::NetworkStatus status );
-
+#endif
 private:
     void typeChanged();
-
+#ifdef MOBILE
     int m_changeCallback;
     QSystemNetworkInfo *m_systemNetworkInfo;
     bool m_bInitialized;
-
+#endif
     static Connection *m_connection;
 
 };

@@ -19,10 +19,13 @@
 #include "../pluginregistry.h"
 
 #include <QApplication>
+
+#ifdef MOBILE
 #include <QFeedbackHapticsEffect>
 
 QTM_USE_NAMESPACE
 
+#endif
 // Create static instance of ourself
 Notification* Notification::m_notification = new Notification();
 
@@ -51,9 +54,10 @@ void Notification::beep( int scId, int ecId, int p_times ) {
 void Notification::vibrate( int scId, int ecId, int p_milliseconds ) {
     Q_UNUSED(scId)
     Q_UNUSED(ecId)
-
+#ifdef MOBILE
     QFeedbackHapticsEffect vibrate;
     vibrate.setIntensity(1.0);
     vibrate.setDuration(p_milliseconds);
     vibrate.start();
+#endif
 }

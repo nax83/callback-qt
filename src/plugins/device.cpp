@@ -18,14 +18,18 @@
 
 #include "../pluginregistry.h"
 
+#ifdef MOBILE
 #include <QSystemDeviceInfo>
 #include <QSystemInfo>
+#endif
 
 #include <QDebug>
 
 #define PHONEGAP "1.0.0"
 
+#ifdef MOBILE
 QTM_USE_NAMESPACE
+#endif
 
 // Create static instance of ourself
 Device* Device::m_device = new Device();
@@ -42,10 +46,10 @@ Device::Device() : PGPlugin() {
  */
 void Device::getInfo( int scId, int ecId ) {
     Q_UNUSED(ecId)
-
+#ifdef MOBILE
     QSystemDeviceInfo *systemDeviceInfo = new QSystemDeviceInfo(this);
     QSystemInfo *systemInfo = new QSystemInfo(this);
-
+#endif
 #ifdef Q_OS_SYMBIAN
     QString platform = "Symbian";
 #endif
@@ -58,6 +62,12 @@ void Device::getInfo( int scId, int ecId ) {
 #ifdef Q_OS_LINUX
     QString platform = "Linux";
 #endif
-
+#ifdef MOBILE
     this->callback( scId, "'" + systemDeviceInfo->model() + "', '" + PHONEGAP + "', '" + platform + "', '" + systemDeviceInfo->uniqueDeviceID() + "', '" + systemInfo->version( QSystemInfo::Os ) + "'" );
-}
+#else
+    QString model("model");
+    QString uuid("uuid");
+    QString os("OS");
+    this->callback( scId, "'" + model + "', '" + PHONEGAP + "', '" + platform + "', '" + uuid + "', '" + os + "'" );
+#endif	
+	}

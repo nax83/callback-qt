@@ -35,7 +35,8 @@ SOURCES += main.cpp mainwindow.cpp \
     src/phonegap.cpp \
     src/pgplugin.cpp \
     src/pgwebpage.cpp \
-    src/plugins/connection.cpp
+    src/plugins/connection.cpp \
+    src/plugins/app.cpp
 HEADERS += mainwindow.h \
     src/plugins/notification.h \
     src/plugins/geolocation.h \
@@ -46,10 +47,13 @@ HEADERS += mainwindow.h \
     src/phonegap.h \
     src/pgplugin.h \
     src/pgwebpage.h \
-    src/plugins/connection.h
+    src/plugins/connection.h \
+    src/plugins/app.h
 FORMS += mainwindow.ui
 
 QT += webkit
+# switch versione desktop, mobile
+#DEFINES += MOBILE
 
 # Please do not modify the following two lines. Required for deployment.
 include(deployment.pri)

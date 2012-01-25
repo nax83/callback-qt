@@ -18,9 +18,10 @@
 
 #include "../pluginregistry.h"
 
+#ifdef MOBILE
 #include <QGeoPositionInfo>
 #include <QGeoCoordinate>
-
+#endif
 Geolocation* Geolocation::m_geolocation = new Geolocation();
 
 /**
@@ -31,16 +32,18 @@ Geolocation::Geolocation() : PGPlugin() {
 }
 
 void Geolocation::init() {
+#ifdef MOBILE
     m_geoPositionInfoSource = QGeoPositionInfoSource::createDefaultSource( m_webFrame );
     if( m_geoPositionInfoSource != 0 ) {
         QObject::connect( m_geoPositionInfoSource, SIGNAL(positionUpdated(QGeoPositionInfo)), this, SLOT(positionUpdated(QGeoPositionInfo)) );
         QObject::connect( m_geoPositionInfoSource, SIGNAL(updateTimeout()), this, SLOT(updateTimeout()) );
     }
+#endif
 }
 
 void Geolocation::getCurrentPosition( int scId, int ecId, QVariantMap p_options ) {
     Q_UNUSED(p_options)
-
+#ifdef MOBILE
     m_successCallbacks << scId;
     m_errorCallbacks << ecId;
 
@@ -52,8 +55,9 @@ void Geolocation::getCurrentPosition( int scId, int ecId, QVariantMap p_options 
         // TODO: Replace with correct error code
         this->updateTimeout();
     }
+#endif
 }
-
+#ifdef MOBILE
 void Geolocation::positionUpdated( const QGeoPositionInfo &update ) {
     QGeoCoordinate coordinate = update.coordinate();
     QString callbackArguments = "Position.cast( Coordinates.cast( " + QString::number(coordinate.latitude()) +
@@ -72,7 +76,11 @@ void Geolocation::positionUpdated( const QGeoPositionInfo &update ) {
     m_errorCallbacks.clear();
     m_successCallbacks.clear();
 }
+#else
+void Geolocation::positionUpdated() {
 
+}
+#endif
 void Geolocation::updateTimeout() {
     for( int i = 0; i < m_errorCallbacks.size(); i++ ) {
         this->callback( m_errorCallbacks.at( i ), "PositionError.cast( PositionError.TIMEOUT, 'Position request timed out.' )" );

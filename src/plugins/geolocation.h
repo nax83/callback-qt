@@ -19,12 +19,14 @@
 
 #include "../pgplugin.h"
 
+#ifdef MOBILE
 #include <QGeoPositionInfoSource>
 #include <QGeoPositionInfo>
 #include <QList>
 
 QTM_USE_NAMESPACE
 
+#endif
 class Geolocation : public PGPlugin
 {
     Q_OBJECT
@@ -39,12 +41,17 @@ public slots:
     void getCurrentPosition( int scId, int ecId, QVariantMap p_options );
 
 protected slots:
+#ifdef MOBILE
     void positionUpdated( const QGeoPositionInfo &update );
+#else
+     void positionUpdated();
+#endif
     void updateTimeout();
 
 private:
+#ifdef MOBILE
     QGeoPositionInfoSource *m_geoPositionInfoSource;
-
+#endif
     QList<int> m_successCallbacks;
     QList<int> m_errorCallbacks;
 

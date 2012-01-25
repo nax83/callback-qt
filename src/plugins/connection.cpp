@@ -34,6 +34,7 @@ Connection::Connection() : PGPlugin() {
  * Initialize the pugin
  */
 void Connection::init() {
+#ifdef MOBILE
     m_changeCallback = -1;
     m_systemNetworkInfo = new QSystemNetworkInfo();
     m_bInitialized = false;
@@ -42,20 +43,24 @@ void Connection::init() {
     QObject::connect(m_systemNetworkInfo,SIGNAL(cellDataTechnologyChanged(QSystemNetworkInfo::CellDataTechnology)),this,SLOT(cellDataTechnologyChanged(QSystemNetworkInfo::CellDataTechnology)));
     QObject::connect(m_systemNetworkInfo,SIGNAL(networkModeChanged(QSystemNetworkInfo::NetworkMode)),this,SLOT(networkModeChanged(QSystemNetworkInfo::NetworkMode)));
     QObject::connect(m_systemNetworkInfo,SIGNAL(networkStatusChanged(QSystemNetworkInfo::NetworkMode,QSystemNetworkInfo::NetworkStatus)),this,SLOT(networkStatusChanged(QSystemNetworkInfo::NetworkMode,QSystemNetworkInfo::NetworkStatus)));
+#endif
 }
 
 void Connection::setChangeCallback( int scId, int ecId ) {
+#ifdef MOBILE
     m_changeCallback = scId;
 
     if( !m_bInitialized ) {
         m_bInitialized = true;
         typeChanged();
     }
+#endif
 }
 
 /**
  * Callbacks for handling changes in the network type
  */
+#ifdef MOBILE
 void Connection::cellDataTechnologyChanged( QSystemNetworkInfo::CellDataTechnology cellTech ) {
     typeChanged();
 }
@@ -65,11 +70,13 @@ void Connection::networkModeChanged( QSystemNetworkInfo::NetworkMode mode ) {
 void Connection::networkStatusChanged( QSystemNetworkInfo::NetworkMode mode, QSystemNetworkInfo::NetworkStatus status ) {
     typeChanged();
 }
+#endif
 
 /**
  * Function for determining the current network type and updating the javascript end
  */
 void Connection::typeChanged() {
+#ifdef MOBILE
     if( m_changeCallback < 0 ) return;
 
     int changeCallback = m_changeCallback;
@@ -104,4 +111,5 @@ void Connection::typeChanged() {
             this->callback( changeCallback, "Connection.CELL_2G" );
         }
     }
+#endif
 }
