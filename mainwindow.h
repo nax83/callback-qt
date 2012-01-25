@@ -42,7 +42,8 @@ public:
     void setOrientation(ScreenOrientation orientation);
 
     void showExpanded();
-
+public slots:
+    void exitApp();
 private:
     Ui::MainWindow *ui;
     PhoneGap *m_phoneGap;

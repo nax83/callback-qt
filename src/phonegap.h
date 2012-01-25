@@ -19,9 +19,11 @@
 
 #include <QObject>
 #include <QWebView>
+#include <QWebHistory>
 #include <QMap>
 #include <QDir>
 
+#include "plugins/app.h"
 #include "pgplugin.h"
 
 class PhoneGap : public QObject
@@ -31,10 +33,13 @@ public:
     explicit PhoneGap(QWebView *webView);
 
 signals:
-
+    void s_exitapp();
 public slots:
     void loadFinished( bool ok );
-
+    void clearCache();
+    void clearHistory();
+    void backHistory();
+    void exitApp();
 private:
     QWebView *m_webView;
     QDir m_workingDir;

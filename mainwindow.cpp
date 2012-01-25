@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     m_phoneGap = new PhoneGap(ui->webView);
+    QObject::connect(m_phoneGap, SIGNAL(s_exitapp()), this, SLOT(exitApp()));
 }
 
 MainWindow::~MainWindow()
@@ -84,4 +85,9 @@ void MainWindow::showExpanded()
 #else
     show();
 #endif
+}
+
+void MainWindow::exitApp(){
+    //TODO
+    exit(0);
 }

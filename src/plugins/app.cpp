@@ -34,6 +34,6 @@ void App::backHistory(int scId, int ecId){
 void App::exitApp(int scId, int ecId){
     Q_UNUSED(ecId)
     Q_UNUSED(scId)
-    qDebug()<<"exit";
+
     emit s_exitApp();
 }

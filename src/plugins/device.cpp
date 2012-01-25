@@ -65,9 +65,10 @@ void Device::getInfo( int scId, int ecId ) {
 #ifdef MOBILE
     this->callback( scId, "'" + systemDeviceInfo->model() + "', '" + PHONEGAP + "', '" + platform + "', '" + systemDeviceInfo->uniqueDeviceID() + "', '" + systemInfo->version( QSystemInfo::Os ) + "'" );
 #else
-    QString model("model");
-    QString uuid("uuid");
-    QString os("OS");
+    //TODO retrieve good values
+    QString model("dummy_model");
+    QString uuid("dummy_uuid");
+    QString os("dummy_OS");
     this->callback( scId, "'" + model + "', '" + PHONEGAP + "', '" + platform + "', '" + uuid + "', '" + os + "'" );
 #endif	
 	}

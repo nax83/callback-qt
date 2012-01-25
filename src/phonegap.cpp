@@ -89,6 +89,16 @@ void PhoneGap::loadFinished( bool ok ) {
                         currPlugin->setWebFrame( webFrame );
                         webFrame->addToJavaScriptWindowObject( objectName, currPlugin );
 
+                        if(attribName.compare("App") == 0){
+                            qDebug() << "App downcast";
+                            App *app = static_cast<App *>(currPlugin);
+                            QObject::connect(app, SIGNAL(s_backHistory()),this, SLOT(backHistory()));
+                            QObject::connect(app, SIGNAL(s_clearCache()),this, SLOT(clearCache()));
+                            QObject::connect(app, SIGNAL(s_clearHistory()),this, SLOT(clearHistory()));
+                            QObject::connect(app, SIGNAL(s_exitApp()),this, SLOT(exitApp()));
+
+                        }
+
                         webFrame->evaluateJavaScript( "PhoneGap.Qt.registerObject( '" + attribValue + "', " + objectName + " )" );
                         webFrame->evaluateJavaScript( "PhoneGap.enablePlugin( '" + attribValue + "' )" );
                     }
@@ -102,4 +112,22 @@ void PhoneGap::loadFinished( bool ok ) {
 
     // Device is now ready to rumble
     webFrame->evaluateJavaScript( "PhoneGap.deviceready();" );
+}
+
+void PhoneGap::clearCache(){
+
+}
+
+void PhoneGap::clearHistory(){
+    m_webView->history()->clear();
+}
+
+void PhoneGap::backHistory(){
+    if(m_webView->history()->canGoBack())
+        m_webView->history()->back();
+}
+
+void PhoneGap::exitApp(){
+    //do everything you need before exit then...
+    emit s_exitapp();
 }
